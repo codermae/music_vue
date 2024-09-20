@@ -26,6 +26,18 @@
             最新MV
           </router-link>
         </li>
+        <li>
+          <router-link to="/like">
+            <span class="iconfont icon-mv"></span>
+            我的收藏
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/singerlist">
+            <span class="iconfont icon-mv"></span>
+            歌手列表
+          </router-link>
+        </li>
       </ul>
     </div>
     <div class="main">
@@ -42,7 +54,7 @@ export default {
   name: 'index',
   data() {
     return {
-      musicUrl:"http://m7.music.126.net/20200303182550/8aa5971b1630d1527a922ccd2b97f392/ymusic/035d/0109/520e/478f86cc9f6c6539f7c8ed3e06c1bf8e.mp3"
+      musicUrl:"https://ting8.yymp3.com/new26/dengziqi6/6.mp3"
     };
   }
 };

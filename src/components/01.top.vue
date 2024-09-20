@@ -27,13 +27,13 @@
     },
     methods:{
       regist(){
-        console.log('regist')
+        this.$router.push('/user/regist')
       },
       login(){
-        this.$router.push('/login')
+        this.$router.push('/user/login')
       },
       search(){
-        console.log('search')
+        this.$router.push('/result')
       }
     }
   }

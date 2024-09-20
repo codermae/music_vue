@@ -1,9 +1,7 @@
 <template>
-  <div style="border: 1px solid black;">
-    我是HelloWorld.vue
+  <div>
     <top />
     <index />
-    <router-link to="/test">GOTEST</router-link>
   </div>
 </template>
 

@@ -45,26 +45,51 @@ export default new Router({
           component:() => import('@/views/06.playlist')
         },
         {
-          path:'my',
+          path:'mv',
           name:'mv',
           component:() => import('@/views/07.mv')
+        },
+        {
+          path:'like',
+          name:'like',
+          component:() => import('@/views/09.like')
+        },
+        {
+          path:'userInfo',
+          name:'userInfo',
+          component:() => import('@/views/10.userInfo')
+        },
+        {
+          path:'singerlist',
+          name:'singerlist',
+          component:() => import('@/views/11.singerlist')
+        },
+        {
+          path:'singerdetail',
+          name:'singerdetail',
+          component:() => import('@/views/12.singerdetail')
+        },
+        {
+          path:'songinfo',
+          name:'songinfo',
+          component:() => import('@/views/13.songInfo')
         }
       ]
     },
     {
-      path:'/test',
-      name:'test',
-      component:() => import('../views/08.login.vue'),
+      path:'/user',
+      name:'login',
+      component:() => import('../views/08.loginRegist.vue'),
       children:[
         {
-          path:'mainone',
-          name:'mainone',
-          component:() => import('../components/mainone.vue')
+          path:'regist',
+          name:'regist',
+          component:() => import('../components/03.regist.vue')
         },
         {
-          path:'maintwo',
-          name:'maintwo',
-          component:() => import('../components/maintwo.vue')
+          path:'login',
+          name:'login',
+          component:() => import('../components/04.login.vue')
         }
       ]
     }
