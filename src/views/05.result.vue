@@ -1,7 +1,7 @@
 <template>
   <div class="result-container">
     <div class="title-wrap">
-      <h2 class="title">李荣浩</h2>
+      <h2 class="title">李荣浩11</h2>
       <span class="sub-title">找到985个结果</span>
     </div>
     <el-card class="song-list-card">

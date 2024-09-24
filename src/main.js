@@ -13,7 +13,10 @@ Vue.use(ElementUI)
 import './assets/index.css'
 
 
+import axios from './axios'
+
 Vue.config.productionTip = false
+Vue.prototype.$axios = axios
 
 /* eslint-disable no-new */
 new Vue({

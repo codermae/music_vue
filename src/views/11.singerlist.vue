@@ -51,6 +51,9 @@ export default {
       ]
     };
   },
+  created(){
+    this.fetchData()
+  },
   computed: {
     paginatedArtists() {
       const start = (this.currentPage - 1) * this.pageSize;
@@ -67,6 +70,15 @@ export default {
     },
     godetail(){
       this.$router.push({path:'/singerdetail'})
+    },
+    async fetchData() {
+      try {
+        const response = await this.$axios.get('/user/getAll'); // 使用全局注册的axios
+        // this.items = response.data;
+        console.log(response);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
   }
 };
