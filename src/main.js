@@ -11,7 +11,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
 // 导入全局初始化样式
 import './assets/index.css'
-
+import store from './store'
 
 import axios from './axios'
 
@@ -22,6 +22,7 @@ Vue.prototype.$axios = axios
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

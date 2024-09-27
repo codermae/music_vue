@@ -10,16 +10,25 @@
       </el-input>
     </div>
     <div class="right-box">
-      <span @click="regist">注册 </span>
-      <span>|</span>
-      <span @click="login"> 登录</span>
+      <span v-if="!isLoggedIn" @click="regist">注册 </span>
+      <span v-if="!isLoggedIn">|</span>
+      <span v-if="!isLoggedIn" @click="login"> 登录</span>
+      <!-- 如果已登录，则显示用户名和退出按钮 -->
+      <span v-else>{{ currentUser}}</span>
+      <span v-else>|</span>
+      <span v-else @click="logout"> 退出</span>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapState } from 'vuex';
+
   export default {
     name: 'top',
+    computed:{
+      ...mapState(['isLoggedIn','currentUser'])
+    },
     data() {
       return {
         input:''
@@ -31,6 +40,10 @@
       },
       login(){
         this.$router.push('/user/login')
+      },
+      logout(){
+        this.$store.dispatch('logout')
+        this.$router.push('/')
       },
       search(){
         this.$router.push('/result')

@@ -25,7 +25,7 @@
       </div>
     </div>
     <!-- 最新音乐 -->
-    <div class="news">
+    <!-- <div class="news">
       <h3 class="title">最新音乐</h3>
       <div class="items">
         <div v-for="(item,index) in new_music" :key="index" class="item">
@@ -39,9 +39,9 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- 推荐MV -->
-    <div class="mvs">
+    <!-- <div class="mvs">
       <h3 class="title">推荐MV</h3>
       <div class="items">
         <div v-for="(item,index) in recom_mv" :key="index" class="item">
@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
