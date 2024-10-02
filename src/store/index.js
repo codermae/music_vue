@@ -8,7 +8,8 @@ Vue.use(Vuex);
 // 定义初始状态
 const state = {
   isLoggedIn: false,
-  currentUser: null
+  currentUser: null,
+
 };
 
 // 定义突变

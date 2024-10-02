@@ -14,9 +14,9 @@
       <span v-if="!isLoggedIn">|</span>
       <span v-if="!isLoggedIn" @click="login"> 登录</span>
       <!-- 如果已登录，则显示用户名和退出按钮 -->
-      <span v-else>{{ currentUser}}</span>
-      <span v-else>|</span>
-      <span v-else @click="logout"> 退出</span>
+      <span v-else-if="isLoggedIn" @click="toInfo">{{ currentUser.username}}</span>
+      <span v-if="isLoggedIn">|</span>
+      <span v-if="isLoggedIn" @click="logout"> 退出</span>
     </div>
   </div>
 </template>
@@ -41,8 +41,15 @@
       login(){
         this.$router.push('/user/login')
       },
+      toInfo(){
+        this.$router.push('/userInfo')
+      },
       logout(){
         this.$store.dispatch('logout')
+        this.$message({
+          message: '账号已退出',
+          type: 'success'
+        });
         this.$router.push('/')
       },
       search(){

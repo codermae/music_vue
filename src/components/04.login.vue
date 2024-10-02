@@ -21,7 +21,7 @@
         placeholder="请输入密码"
         prefix-icon="el-icon-lock"
         v-model="ruleForm.pass"
-        @keyup.enter.native="toSubmitForm('ruleForm')"
+        @keyup.enter.native="submitForm('ruleForm')"
       ></el-input>
     </el-form-item>
     <el-form-item>
@@ -60,9 +60,7 @@ export default {
       rules: {
         user: [{ required: true, validator: validateUser, trigger: "blur" }],
         pass: [{ required: true, validator: validatePass, trigger: "blur" }],
-      },
-      userLoggedIn: false, // 用户登录状态
-      userAvatar: null // 用户头像地址
+      }
     };
   },
   methods: {
@@ -78,18 +76,23 @@ export default {
     },
     login() {
       // 模拟用户登录的行为
-      // this.$store.dispatch('login','sssssss');
       this.$axios.post('/user/login', {
         username: this.ruleForm.user,
         password: this.ruleForm.pass
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         this.$store.dispatch('login',res); // 设置用户登录状态为true
+        this.$message({
+          message: '登陆成功',
+          type: 'success'
+        });
         this.$router.push('/');
-        // this.userAvatar = 'path/to/avatar.png'; // 设置用户头像地址
-        // 实际应用中，这里可能涉及到发送请求到服务器验证用户身份，并获取用户信息
       }).catch(err => {
         console.error(err);
+        this.$message({
+          message: '登陆失败请检查你用户名和密码',
+          type: 'fail'
+        });
       })
     }
   }

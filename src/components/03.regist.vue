@@ -14,30 +14,13 @@
         prefix-icon="el-icon-user-solid"
       ></el-input>
     </el-form-item>
-    <el-form-item prop="pass1">
+    <el-form-item prop="mobile">
       <el-input
         class="phone-input"
         placeholder="手机号/邮箱"
-        v-model="ruleForm.pass1"
+        v-model="ruleForm.mobile"
         prefix-icon="el-icon-mobile-phone"
       ></el-input>
-    </el-form-item>
-    <el-form-item prop="code" class="phone" v-show="yzmshow">
-      <el-input
-        v-model="ruleForm.code"
-        placeholder="验证码"
-        :minlength="6"
-        :maxlength="6"
-      ></el-input>
-      <el-button
-        type="primary"
-        @click="getCode()"
-        class="code-btn"
-        :disabled="!show"
-      >
-        <span v-show="show">发送验证码</span>
-        <span v-show="!show" class="count">{{ count }} s</span>
-      </el-button>
     </el-form-item>
     <el-form-item prop="pass">
       <el-input
@@ -57,7 +40,6 @@
     </el-form-item>
     <el-form-item class="btn-form">
       <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
-      <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
     </el-form-item>
   </el-form>
 </template>
@@ -70,11 +52,9 @@ export default {
         callback(new Error("请输入用户名"));
       } else {
         if (value) {
-          const res = await request.post("/api/user/checkUsernameExist", {
-            username: this.ruleForm.user1,
-          });
+          const res = await this.$axios.get("/user/"+value);
           console.log(res);
-          if (res.data.code === 20000) {
+          if (!res) {
             callback();
           } else {
             return callback(new Error("该用户名已经被注册"));
@@ -82,7 +62,7 @@ export default {
         }
       }
     };
-    var validatePass1 = async (rule, value, callback) => {
+    var validateMobile = async (rule, value, callback) => {
       if (value === "") {
         callback(new Error("手机号或者邮箱不能为空"));
       } else {
@@ -107,17 +87,6 @@ export default {
         callback();
       }
     };
-    var validateCode = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入验证码"));
-      } else {
-        if (this.ruleForm.code.length === 6) {
-          callback();
-        } else {
-          callback(new Error("验证码不正确"));
-        }
-      }
-    };
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
@@ -129,40 +98,17 @@ export default {
     };
     return {
       activeIndex: "2",
-      loginForm: {
-        mobile: "",
-        code: "",
-        zheCode: "",
-      },
       show: true,
       count: "",
       timer: null,
       yzmshow: false,
       ruleForm: {
         user1: "",
-        pass1: "",
         pass: "",
         checkPass: "",
-        zhecode: "",
         mobile: "",
-        phoneCode: "",
-        emailCode: "",
-        code: "",
       },
       rules: {
-        code: [
-          {
-            required: true,
-            validator: validateCode,
-            trigger: "blur",
-          },
-          {
-            min: 6,
-            max: 6,
-            message: "长度为6",
-            trigger: "blur",
-          },
-        ],
         user1: [
           {
             required: true,
@@ -170,10 +116,10 @@ export default {
             trigger: "blur",
           },
         ],
-        pass1: [
+        mobile: [
           {
             required: true,
-            validator: validatePass1,
+            validator: validateMobile,
             trigger: "blur",
           },
         ],
@@ -206,6 +152,31 @@ export default {
       },
     };
   },
+  methods:{
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$axios.post("/user",{
+            username:this.ruleForm.user1,
+            password:this.ruleForm.pass,
+            mobile:this.ruleForm.mobile,
+            privilege:'user'
+          }).then((result) => {
+            console.log(result);
+            if(result = 1){
+              this.$message({
+                message: '注册成功请登录',
+                type: 'success'
+              });
+              this.$router.push('/user/login');
+            }
+          })
+         }else{
+          console.log('表单验证失败');
+         }
+      });
+    },
+  }
 };
 </script>
 

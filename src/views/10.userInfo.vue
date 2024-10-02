@@ -1,17 +1,19 @@
 <template>
   <el-descriptions class="margin-top" title="" :column="3" border>
     <template slot="extra">
-      <el-button type="primary" size="small" @click="dialogVisible = true">注销</el-button>
+      <el-button type="primary" size="small" @click="dialogVisible = true"
+        >注销</el-button
+      >
       <el-dialog
         title="提示"
+        v-if="dialogVisible"
         :visible.sync="dialogVisible"
         width="30%"
-        :before-close="handleClose"
       >
-        <span>这是一段信息</span>
+        <span>确定要注销账号吗？</span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="confirmAction">确 定</el-button>
+          <el-button type="primary" @click="logout">确 定</el-button>
         </span>
       </el-dialog>
     </template>
@@ -62,18 +64,25 @@ export default {
     };
   },
   methods: {
-    handleClose(done) {
-      this.dialogVisible = false;
-      if (typeof done === 'function') {
-        done();
-      }
-    },
-    confirmAction() {
-      // 执行确认操作
-      console.log('确认操作执行');
-      this.dialogVisible = false;
-    },
-  },
+    logout() {
+      // zhu xiao
+      this.$axios.delete('/user/'+this.$store.state.currentUser.user_id).then(res => {
+        // console.log(res);
+        this.$store.dispatch('logout'); // 设置用户登录状态为false
+        this.$message({
+          message: '註銷成功',
+          type: 'success'
+        });
+        this.$router.push('/');
+      }).catch(err => {
+        console.error(err);
+        this.$message({
+          message: '註銷失敗',
+          type: 'fail'
+        });
+      })
+    }
+  }
 };
 </script>
 
