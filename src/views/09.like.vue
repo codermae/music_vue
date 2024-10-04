@@ -80,7 +80,12 @@ export default {
             song_id:song.song_id,
             user_id:this.$store.state.currentUser.user_id
           }
-        })
+        }).then(
+          this.$message({
+            message: '取消收藏成功',
+            type: 'success'
+          })
+        )
         // 移除歌曲
         this.songs = this.songs.filter(s => s.song_id !== song.song_id);
         // 更新总数

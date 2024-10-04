@@ -53,7 +53,7 @@
         this.$router.push('/')
       },
       search(){
-        this.$router.push('/result')
+        this.$router.push('/result?keyword='+this.input)
       }
     }
   }
