@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-card class="song-list-card">
+    <el-card class="song-list-card" v-if="this.$store.state.currentUser">
       <el-table
         :data="paginatedSongs"
         style="width: 100%"
         @row-click="handleRowClick"
       >
-        <el-table-column prop="name" label="歌曲名称" width="180"></el-table-column>
-        <el-table-column prop="artist" label="歌手" width="180"></el-table-column>
-        <el-table-column prop="album" label="专辑" width="180"></el-table-column>
+        <el-table-column prop="song_name" label="歌曲名称" width="180"></el-table-column>
+        <el-table-column prop="artist_name" label="歌手" width="180"></el-table-column>
+        <el-table-column prop="album_name" label="专辑" width="180"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" @click="playSong(scope.row)">播放</el-button>
-            <el-button size="mini" type="danger" @click="removeSong(scope.row)">取消收藏</el-button>
+            <el-button size="mini" @click="playSong(scope.row,$event)">播放</el-button>
+            <el-button size="mini" type="danger" @click="removeSong(scope.row,$event)">取消收藏</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -25,6 +25,12 @@
         @current-change="handlePageChange"
       ></el-pagination>
     </el-card>
+    <el-card class="song-list-card" v-else>
+      <div style="text-align: center;">
+        <p>您还未登录</p>
+        <el-button type="primary" @click="toLogin">登录</el-button>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -34,45 +40,78 @@ export default {
   name: 'MySongs',
   data() {
     return {
-      songs: [
-        { id: 1, name: '歌名1', artist: '歌手1', album: '专辑1', url: 'http://example.com/song1.mp3' },
-        { id: 2, name: '歌名2', artist: '歌手2', album: '专辑2', url: 'http://example.com/song2.mp3' },
-        { id: 3, name: '歌名3', artist: '歌手3', album: '专辑3', url: 'http://example.com/song3.mp3' },
-        { id: 4, name: '歌名4', artist: '歌手4', album: '专辑4', url: 'http://example.com/song4.mp3' },
-        { id: 5, name: '歌名5', artist: '歌手5', album: '专辑5', url: 'http://example.com/song5.mp3' },
-        { id: 6, name: '歌名6', artist: '歌手6', album: '专辑6', url: 'http://example.com/song6.mp3' },
-        { id: 7, name: '歌名7', artist: '歌手7', album: '专辑7', url: 'http://example.com/song7.mp3' },
-        { id: 8, name: '歌名8', artist: '歌手8', album: '专辑8', url: 'http://example.com/song8.mp3' },
-        { id: 9, name: '歌名9', artist: '歌手9', album: '专辑9', url: 'http://example.com/song9.mp3' },
-        { id: 10, name: '歌名10', artist: '歌手10', album: '专辑10', url: 'http://example.com/song10.mp3' },
-      ],
+      songs: [],
       currentPage: 1,
       pageSize: 5,
       totalSongs: 0,
     };
   },
   created() {
-    this.totalSongs = this.songs.length;
+    // 初始化数据
+    const currentUser = this.$store.state.currentUser ? this.$store.state.currentUser.user_id : null;
+    if (currentUser) this.fetchData(currentUser);
   },
   methods: {
-    handleRowClick(row) {
-      this.$router.push('/songinfo');
+    toLogin(){
+      this.$router.push('/user/login');
     },
-    playSong(song) {
+    // 处理行点击事件
+    handleRowClick(row) {
+      console.log(row)
+      this.$router.push({
+        path:'/songinfo',
+        query:{info:row}
+      });
+    },
+    // 播放歌曲
+    playSong(song,event) {
+      event.stopPropagation();
       console.log('Playing song:', song);
       // 播放歌曲的逻辑
+      this.$store.dispatch('setCurrentSong',song.file_path)
     },
-    removeSong(song) {
+    // 删除歌曲
+    async removeSong(song,event) {
+      event.stopPropagation();
       console.log('Removing song:', song);
-      // 删除歌曲的逻辑
-      this.songs = this.songs.filter(s => s.id !== song.id);
-      this.totalSongs = this.songs.length;
+      try{
+        await this.$axios.delete('/fav/',{
+          data:{
+            song_id:song.song_id,
+            user_id:this.$store.state.currentUser.user_id
+          }
+        })
+        // 移除歌曲
+        this.songs = this.songs.filter(s => s.song_id !== song.song_id);
+        // 更新总数
+        this.totalSongs = this.songs.length;
+        // // 重新计算分页数据
+        // this.paginatedSongs = this.songs.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+        // 如果当前页的歌曲数量不足 pageSize，则调整当前页数
+        if (this.paginatedSongs.length === 0 && this.currentPage > 1) {
+          this.currentPage--;
+        }
+        // console.log(this.songs)
+      }catch(error){
+        console.error('Error removing song:', error);
+      }
     },
     handlePageChange(page) {
       this.currentPage = page;
     },
+    // 获取数据
+    async fetchData(userId){
+      try{
+        this.songs  = await this.$axios.get('/fav/'+userId);
+        // console.log(this.songs)
+        this.totalSongs = this.songs.length;
+      }catch(error){
+        console.error('Error fetching data:', error);
+      }
+    }
   },
   computed: {
+    // 确定分页显示内容
     paginatedSongs() {
       const start = (this.currentPage - 1) * this.pageSize;
       const end = start + this.pageSize;

@@ -44,7 +44,7 @@
       <router-view></router-view>
     </div>
     <div class="player">
-      <audio :src='musicUrl' controls></audio>
+      <audio :src='musicUrl' controls autoplay></audio>
     </div>
   </div>
 </template>
@@ -54,9 +54,15 @@ export default {
   name: 'index',
   data() {
     return {
-      musicUrl:"https://ting8.yymp3.com/new26/dengziqi6/6.mp3"
+      // musicUrl: this.$store.state.currentSong
+      // musicUrl:"https://ting8.yymp3.com/new26/dengziqi6/6.mp3"
     };
-  }
+  },
+  computed: {
+    musicUrl() {
+      return this.$store.state.currentSong;
+    }
+  },
 };
 </script>
 

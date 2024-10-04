@@ -1,12 +1,12 @@
 <template>
   <el-card class="user-info-card">
     <div slot="header" class="clearfix">
-      <img :src="userInfo.img" alt="User Image" class="user-image" />
-      <h3>{{ userInfo.name }}</h3>
+      <img :src="currentArtist.image_url" alt="User Image" class="user-image" />
+      <h3>{{ currentArtist.artist_name }}</h3>
     </div>
     <div>
-      <p><strong>Country:</strong> {{ userInfo.country }}</p>
-      <p><strong>Description:</strong> {{ userInfo.description }}</p>
+      <p><strong>Country:</strong> {{ currentArtist.nationality }}</p>
+      <p><strong>Description:</strong> {{ currentArtist.official_website }}</p>
     </div>
   </el-card>
 </template>
@@ -18,13 +18,19 @@ export default {
   components: {
     ElCard,
   },
+  created(){
+    this.currentArtist = this.$route.query.artist || {};
+    // console.log('====================================');
+    // console.log(this.currentArtist);
+    // console.log('====================================');
+  },
   data() {
     return {
-      userInfo: {
-        img: 'https://via.placeholder.com/150',
-        name: '李华',
-        country: '中国',
-        description: '这是一位来自中国的用户，喜欢编程和旅行。',
+      currentArtist: {
+        image_url: 'https://via.placeholder.com/150',
+        artist_name: '李华',
+        nationality: '中国',
+        official_website: '这是一位来自中国的用户，喜欢编程和旅行。',
       },
     };
   },

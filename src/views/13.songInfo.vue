@@ -1,6 +1,6 @@
 <template>
   <el-descriptions class="margin-top" title="" :column="3" border>
-    <template slot="extra">
+    <!-- <template slot="extra">
       <el-button type="primary" size="small" @click="dialogVisible = true">注销</el-button>
       <el-dialog
         title="提示"
@@ -14,67 +14,71 @@
           <el-button type="primary" @click="confirmAction">确 定</el-button>
         </span>
       </el-dialog>
-    </template>
+    </template> -->
     <el-descriptions-item>
       <template slot="label">
         <i class="el-icon-user"></i>
-        用户名
+      歌曲名
       </template>
-      userMessage.username
+      {{ songInfo.song_name }}
     </el-descriptions-item>
     <el-descriptions-item>
       <template slot="label">
         <i class="el-icon-mobile-phone"></i>
-        手机号
+        所属专辑
       </template>
-      userMessage.phone
+      {{ songInfo.album_name }}
     </el-descriptions-item>
     <el-descriptions-item>
       <template slot="label">
         <i class="el-icon-location-outline"></i>
-        居住地
+        作者
       </template>
-      userMessage.address
+      {{ songInfo.artist_name }}
     </el-descriptions-item>
     <el-descriptions-item>
       <template slot="label">
         <i class="el-icon-tickets"></i>
-        备注
+        歌曲介绍
       </template>
-      <el-tag size="small"> userMessage.remarks </el-tag>
-    </el-descriptions-item>
-    <el-descriptions-item>
-      <template slot="label">
-        <i class="el-icon-office-building"></i>
-        联系地址
-      </template>
-      userMessage.connectAddress
+      <div class="multi-line-tag">
+        {{ text }}
+      </div>
     </el-descriptions-item>
   </el-descriptions>
 </template>
 
 <script>
 export default {
-  props: ["userMessage"],
   data() {
     return {
-      dialogVisible: false,
+      songInfo:{},
+      text:"《北京欢迎你》是一首承载着2008年北京奥运会精神与热情的标志性歌曲。此曲由林夕精心填词，"
+      +"小柯谱曲，并集结了超过百位华语乐坛的明星共同献唱，展现了前所未有的团结力量。歌曲于2008年4月30日正式发行，"
+      +"迅速成为了当年最受欢迎的歌曲之一，并在随后的2009年荣获MusicRadio音乐之声点播冠军曲的荣誉。"
+      +"《北京欢迎你》以其简洁而富有感染力的旋律，搭配温馨而鼓舞人心的歌词，不仅传达了北京作为东道主对全世界宾客的热情欢迎，"
+      +"同时也鼓励每一个人追求自己的梦想，相信只要有勇气就能创造奇迹。这首歌曲不仅是对2008年北京奥运会的庆祝，更是对中国悠久历史文化和现代都市风貌的一次精彩展示。"
+      +"通过这首歌，无数听众感受到了北京这座城市的魅力以及中国人民的热情好客。"
     };
   },
+  created(){
+    this.songInfo = this.recSongInfo;
+  },
   methods: {
-    handleClose(done) {
-      this.dialogVisible = false;
-      if (typeof done === 'function') {
-        done();
-      }
-    },
-    confirmAction() {
-      // 执行确认操作
-      console.log('确认操作执行');
-      this.dialogVisible = false;
-    },
+
+  },
+  computed: {
+    recSongInfo() {
+      console.log(this.$route.query.info);
+      return this.$route.query.info;
+    }
   },
 };
 </script>
 
-<style></style>
+<style>
+  .multi-line-tag {
+    white-space: pre-wrap; /* 保留换行符和空格 */
+    word-break: break-word; /* 自动换行 */
+  }
+</style>

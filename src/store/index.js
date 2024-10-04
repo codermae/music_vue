@@ -9,10 +9,10 @@ Vue.use(Vuex);
 const state = {
   isLoggedIn: false,
   currentUser: null,
-
+  currentSong: null,
 };
 
-// 定义突变
+// 定义突变 改变state
 const mutations = {
   SET_LOGGED_IN(state, payload) {
     state.isLoggedIn = payload.isLoggedIn;
@@ -21,10 +21,14 @@ const mutations = {
   LOGOUT(state) {
     state.isLoggedIn = false;
     state.currentUser = null;
+    state.currentSong = null;
+  },
+  SET_CURRENT_SONG(state,song){
+    state.currentSong = song;
   }
 };
 
-// 定义动作
+// 定义动作 处理异步操作
 const actions = {
   login({ commit }, user) {
     // 这里可以添加验证逻辑，例如向后端发送请求
@@ -33,13 +37,17 @@ const actions = {
   },
   logout({ commit }) {
     commit('LOGOUT');
+  },
+  setCurrentSong({commit},song){
+    commit('SET_CURRENT_SONG',song)
   }
 };
 
 // 定义 getters
 const getters = {
   isLoggedIn: state => state.isLoggedIn,
-  currentUser: state => state.currentUser
+  currentUser: state => state.currentUser,
+  currentSong: state => state.currentSong
 };
 
 // 创建并导出 store

@@ -2,10 +2,10 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="12" v-for="(artist, index) in paginatedArtists" :key="index">
-        <div class="artist-info" @click="godetail">
+        <div class="artist-info" @click="godetail(artist)">
           <!-- 这里可以放置歌手的具体信息，例如歌手名、国籍、等等 -->
-          <h3>{{ artist.name }}</h3>
-          <p>{{ artist.country }}</p>
+          <h3>{{ artist.artist_name }}</h3>
+          <p>{{ artist.nationality }}</p>
         </div>
       </el-col>
     </el-row>
@@ -68,14 +68,13 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
     },
-    godetail(){
-      this.$router.push({path:'/singerdetail'})
+    godetail(artist){
+      this.$router.push({path:'/singerdetail',query:{artist} })
     },
     async fetchData() {
       try {
-        const response = await this.$axios.get('/user/getAll'); // 使用全局注册的axios
-        // this.items = response.data;
-        console.log(response);
+        this.artists = await this.$axios.get('/artists') || {}; // 使用全局注册的axios
+        // console.log(response);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
