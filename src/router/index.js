@@ -73,6 +73,11 @@ export default new Router({
           path:'songinfo',
           name:'songinfo',
           component:() => import('@/views/13.songInfo')
+        },
+        {
+          path:'album/:id',
+          name:'album',
+          component:() => import('@/views/14.albumDetail')
         }
       ]
     },

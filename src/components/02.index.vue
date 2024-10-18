@@ -8,24 +8,24 @@
             发现音乐
           </router-link>
         </li>
-        <li>
+        <!-- <li>
           <router-link to="/playlists">
             <span class="iconfont icon-music-list"></span>
             推荐歌单
           </router-link>
-        </li>
+        </li> -->
         <li>
           <router-link to="/songs">
             <span class="iconfont icon-music"></span>
             最新音乐
           </router-link>
         </li>
-        <li>
+        <!-- <li>
           <router-link to="/mvs">
             <span class="iconfont icon-mv"></span>
             最新MV
           </router-link>
-        </li>
+        </li> -->
         <li>
           <router-link to="/like">
             <span class="iconfont icon-mv"></span>

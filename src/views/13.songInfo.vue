@@ -27,14 +27,14 @@
         <i class="el-icon-mobile-phone"></i>
         所属专辑
       </template>
-      {{ songInfo.album_name }}
+      {{ songInfo.album_name || album_name}}
     </el-descriptions-item>
     <el-descriptions-item>
       <template slot="label">
         <i class="el-icon-location-outline"></i>
         作者
       </template>
-      {{ songInfo.artist_name }}
+      {{ songInfo.artist_name || songInfo.performer}}
     </el-descriptions-item>
     <el-descriptions-item>
       <template slot="label">
@@ -53,6 +53,7 @@ export default {
   data() {
     return {
       songInfo:{},
+      album_name:'',
       text:"《北京欢迎你》是一首承载着2008年北京奥运会精神与热情的标志性歌曲。此曲由林夕精心填词，"
       +"小柯谱曲，并集结了超过百位华语乐坛的明星共同献唱，展现了前所未有的团结力量。歌曲于2008年4月30日正式发行，"
       +"迅速成为了当年最受欢迎的歌曲之一，并在随后的2009年荣获MusicRadio音乐之声点播冠军曲的荣誉。"
@@ -70,6 +71,7 @@ export default {
   computed: {
     recSongInfo() {
       console.log(this.$route.query.info);
+      this.album_name = this.$route.query.album_name;
       return this.$route.query.info;
     }
   },

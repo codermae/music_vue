@@ -1,28 +1,28 @@
 <template>
   <div class="result-container">
     <div class="title-wrap">
-      <h2 class="title">{{ this.$route.query.keyword }}</h2>
-      <span class="sub-title">找到{{ this.totalSongs }}个结果</span>
+
     </div>
     <el-card class="song-list-card">
       <el-table
-        :data="paginatedSongs"
+        :data="albumSong"
         style="width: 100%"
         @row-click="handleRowClick"
       >
+        <el-table-column type="index" width="100">
+          <div class="img-wrap">
+            <img :src="songCover" alt="" />
+            <span class="iconfont icon-play"></span>
+          </div>
+        </el-table-column>
         <el-table-column
           prop="song_name"
           label="歌曲名称"
           width="180"
         ></el-table-column>
         <el-table-column
-          prop="artist_name"
+          prop="performer"
           label="歌手"
-          width="180"
-        ></el-table-column>
-        <el-table-column
-          prop="album_name"
-          label="专辑"
           width="180"
         ></el-table-column>
         <el-table-column
@@ -58,40 +58,31 @@
 
 <script>
 export default {
-  name: "result",
   data() {
     return {
-      activeIndex: "songs",
-      resultList: [
-        {
-          num: 1,
-          song: "Let It Be",
-          singer: "The Beatles",
-          album: "Abbey Road",
-          duration: "3:45",
-        }
-      ],
+      songCover: require('../assets/songCover.jpg'), // 确保返回的是字符串
+      albumName: '',
+      albumSong:[],
       currentPage: 1,
       pageSize: 5,
       totalSongs: 0,
     };
   },
   created() {
-    this.fetchData();
+    this.albumSong = this.$route.params.songinfo;
+    this.albumName = this.$route.params.name;
+    console.log(this.albumSong)
+    console.log(this.albumName)
+    // 根据 id 获取专辑详细信息
   },
-  watch: {
-    '$route.query.keyword': {
-      handler(newKeyword) {
-        this.fetchData();
-      },
-      immediate: true,
-    },
-  },
-  methods: {
+  methods:{
     handleRowClick(row) {
       this.$router.push({
         path: "/songinfo",
-        query: { info: row },
+        query: {
+          info: row,
+          album_name:this.albumName
+         },
       });
     },
     playSong(song, event) {
@@ -133,18 +124,6 @@ export default {
     handleButtonClick(row) {
       console.log("Button clicked:", row);
     },
-    async fetchData() {
-      try {
-        this.resultList = await this.$axios.get(
-          "/songs/" + this.$route.query.keyword
-        );
-        console.log(this.$route.query.keyword);
-        console.log(this.resultList);
-        this.totalSongs = this.resultList.length;
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    },
   },
   computed: {
     paginatedSongs() {
@@ -152,8 +131,10 @@ export default {
       const end = start + this.pageSize;
       return this.resultList.slice(start, end);
     },
-  },
+  }
 };
 </script>
 
-<style></style>
+<style scoped>
+/* 你的样式 */
+</style>

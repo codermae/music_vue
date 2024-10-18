@@ -15,7 +15,7 @@
         prefix-icon="el-icon-user-solid"
       ></el-input>
     </el-form-item>
-    <el-form-item prop="pass">
+    <el-form-item prop="password">
       <el-input
         type="password"
         placeholder="请输入密码"
@@ -78,7 +78,7 @@ export default {
       // 模拟用户登录的行为
       this.$axios.post('/user/login', {
         username: this.ruleForm.user,
-        password: this.ruleForm.pass
+        password_hash: this.ruleForm.pass
       }).then(res => {
         // console.log(res);
         this.$store.dispatch('login',res); // 设置用户登录状态为true

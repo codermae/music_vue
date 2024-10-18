@@ -158,7 +158,7 @@ export default {
         if (valid) {
           this.$axios.post("/user",{
             username:this.ruleForm.user1,
-            password:this.ruleForm.pass,
+            password_hash:this.ruleForm.pass,
             mobile:this.ruleForm.mobile,
             privilege:'user'
           }).then((result) => {
